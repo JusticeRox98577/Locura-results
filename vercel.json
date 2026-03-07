@@ -1,0 +1,19 @@
+{
+  "rewrites": [
+    {
+      "source": "/admin",
+      "has": [{ "type": "host", "value": "voting.locurademarzo.org" }],
+      "destination": "/vote-admin.html"
+    },
+    {
+      "source": "/admin/(.*)",
+      "has": [{ "type": "host", "value": "voting.locurademarzo.org" }],
+      "destination": "/vote-admin.html"
+    },
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "voting.locurademarzo.org" }],
+      "destination": "/vote.html"
+    }
+  ]
+}

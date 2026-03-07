@@ -88,3 +88,8 @@ button{
   border-radius:10px;
   border:1px solid #ff4d5a;
 }
+
+.small{
+  opacity:.75;
+  font-size:14px;
+}
