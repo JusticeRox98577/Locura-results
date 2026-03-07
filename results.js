@@ -48,6 +48,15 @@ async function saveResults(winners) {
   else alert("Results saved.");
 }
 
+async function resetResults() {
+  const { error } = await supabase
+    .from("results")
+    .upsert({ id: "current", winners: {} }, { onConflict: "id" });
+
+  if (error) alert(error.message);
+  else alert("Results reset.");
+}
+
 /* =========================
    SONG DATA
 ========================= */
@@ -204,7 +213,12 @@ function renderDashboard(winners) {
     });
   });
 
-  html += `<button id="save" class="primary">Save Results</button></div>`;
+  html += `
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button id="save" class="primary">Save Results</button>
+      <button id="reset" class="danger">Reset Results</button>
+    </div>
+  </div>`;
   render(html);
 
   document.querySelectorAll(".option").forEach(btn=>{
@@ -215,6 +229,13 @@ function renderDashboard(winners) {
   });
 
   document.querySelector("#save").onclick=()=>saveResults(winners);
+  document.querySelector("#reset").onclick=async()=>{
+    const ok = confirm("Reset all official winners?");
+    if(!ok) return;
+    await resetResults();
+    const fresh = await loadResults();
+    renderDashboard(fresh);
+  };
   document.querySelector("#signout").onclick=async()=>{
     await supabase.auth.signOut();
     init();
