@@ -49,11 +49,15 @@ async function saveResults(winners) {
 }
 
 async function resetResults() {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("results")
-    .upsert({ id: "current", winners: {} }, { onConflict: "id" });
+    .update({ winners: {} })
+    .eq("id", "current")
+    .select("id")
+    .maybeSingle();
 
   if (error) alert(error.message);
+  else if (!data) alert("No current results row found (id='current').");
   else alert("Results reset.");
 }
 
